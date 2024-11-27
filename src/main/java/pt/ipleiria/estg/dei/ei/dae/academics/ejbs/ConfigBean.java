@@ -9,12 +9,12 @@ import jakarta.ejb.Startup;
 @Singleton
 public class ConfigBean {
     @EJB
-    private StudentBean studentBean;
+    private ClientBean clientBean;
 
     @PostConstruct
     public void init() {
         System.out.println("\n\nConfigBean init\n\n");
 
-        studentBean.create("carlos", "123", "Carlos Ferreira", "carlos.j.ferreira@ipleiria.pt");
+        clientBean.create("carlos", "123", "Carlos Ferreira", "carlos.j.ferreira@ipleiria.pt");
     }
 }

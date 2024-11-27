@@ -1,9 +1,7 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.security;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Default;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;

@@ -1,8 +1,9 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.exceptions;
 
-import java.util.stream.Collectors;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+
+import java.util.stream.Collectors;
 
 public class MyConstraintViolationException extends Exception {
     public MyConstraintViolationException(ConstraintViolationException e) {
