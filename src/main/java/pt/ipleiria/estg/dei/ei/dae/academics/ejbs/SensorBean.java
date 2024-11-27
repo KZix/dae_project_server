@@ -12,14 +12,15 @@ public class SensorBean {
     @PersistenceContext
     private EntityManager em;
 
-    public List<Sensor> getAllSensors() {
-        return em.createQuery("SELECT s FROM Sensor s", Sensor.class).getResultList();
+    public int create(String name, int volume, boolean estado, float valor) {
+        Sensor sensor = new Sensor(); // Or instantiate specific subclass
+        sensor.setName(name);
+        sensor.setVolume(volume);
+        sensor.setEstado(estado);
+        sensor.setValor(valor);
+        em.persist(sensor);
+        return sensor.getId(); // Return the ID of the created sensor
     }
-
-    public Sensor findSensor(int id) {
-        return em.find(Sensor.class, id);
-    }
-
-    // Other generic methods (add, update, delete)
 }
+
 

@@ -13,10 +13,12 @@ public class Sensor {
     private int volume;
     private boolean estado;
     private float valor;
+    private String name;
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaLeitura;
 
     // Abstract methods for subclasses
+
     public void enviarLeitura(float valor) {
 
     }
@@ -30,6 +32,14 @@ public class Sensor {
     }
 
     // Getters and setters
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public int getId() {
         return id;
