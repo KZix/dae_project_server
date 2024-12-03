@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ws;
 
 import jakarta.annotation.security.RolesAllowed;
 //import jakarta.mail.MessagingException;
+import jakarta.mail.MessagingException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
@@ -10,10 +11,12 @@ import jakarta.ws.rs.core.SecurityContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.ClientDTO;
 //import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SubjectDTO;
 //import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.EmailBean;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.EmailDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.ClientBean;
 
 import jakarta.ejb.EJB;
 import jakarta.ws.rs.core.MediaType;
+import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.EmailBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
@@ -31,8 +34,8 @@ import java.util.stream.Collectors;
 public class ClientService {
     @EJB
     private ClientBean clientBean;
-    //@EJB
-    //private EmailBean emailBean;
+    @EJB
+    private EmailBean emailBean;
 
     @Context
     private SecurityContext securityContext;
@@ -87,6 +90,14 @@ public class ClientService {
         return Response.ok(ClientDTO.from(client)).build();
     }
 
+    @POST
+    @Path("/{username}/email")
+    public Response sendEmail(@PathParam("username") String username, EmailDTO email)
+            throws MyEntityNotFoundException, MessagingException {
 
+        Client client = clientBean.find(username);
+        emailBean.send(client.getEmail(), email.getSubject(), email.getBody());
+        return Response.status(Response.Status.OK).entity("E-mail sent").build();
+    }
 
 }
