@@ -2,7 +2,10 @@ package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -15,6 +18,8 @@ public class Sensor {
     private float valor;
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
+    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
+    private List<LeituraSensor> leituras = new ArrayList<>();
     private Date ultimaLeitura;
 
     // Abstract methods for subclasses
@@ -79,6 +84,14 @@ public class Sensor {
 
     public void setUltimaLeitura(Date ultimaLeitura) {
         this.ultimaLeitura = ultimaLeitura;
+    }
+
+    public List<LeituraSensor> getLeituras() {
+        return leituras;
+    }
+
+    public void setLeituras(List<LeituraSensor> leituras) {
+        this.leituras = leituras;
     }
 }
 
