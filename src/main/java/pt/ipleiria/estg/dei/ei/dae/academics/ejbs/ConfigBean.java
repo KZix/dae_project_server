@@ -44,22 +44,17 @@ public class ConfigBean {
         clientBean.create("john_doe", "password123", "John Doe", "john.doe@example.com");
         clientBean.create("jane_doe", "password456", "Jane Doe", "jane.doe@example.com");
 
-        //sensor generico
-        sensorBean.create("Generic Sensor 1", 50, false, 0.0f);
+        try {
+            // Create sensors
+            int sensorId = sensorBean.create("Temperature Sensor", 50,true,22.1f);
 
-        // Create a SensorPosicao with specific properties
-        sensorPosicaoBean.create("Position Sensor 1", 100, true, 0.0f);
-
-        // Create another SensorPosicao
-        sensorPosicaoBean.create("Position Sensor 2", 120, false, 0.0f);
-
-        // Create a SensorAceleracao
-        sensorAceleracaoBean.create("Acceleration Sensor 1", 200, true, 0.0f);
-
-        // Create another SensorAceleracao and detect impacts
-        int accelerometerId = sensorAceleracaoBean.create("Acceleration Sensor 2", 150, true, 0.0f);
-        sensorAceleracaoBean.detectarImpacto(5, 10.5f);
-        sensorAceleracaoBean.detectarImpacto(4, 12.0f);
+            // Add readings
+            sensorBean.addSensorReading(sensorId, 22.5f);
+            sensorBean.addSensorReading(sensorId, 23.8f);
+            sensorBean.addSensorReading(sensorId, 21.7f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         try {
 

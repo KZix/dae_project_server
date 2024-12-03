@@ -1,5 +1,6 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -21,6 +22,14 @@ public class SensorBean {
         em.persist(sensor);
         return sensor.getId(); // Return the ID of the created sensor
     }
+
+    @EJB
+    private LeituraSensorBean leituraSensorBean;
+
+    public void addSensorReading(int sensorId, float valor) {
+        leituraSensorBean.registerReading(sensorId, valor);
+    }
+
 }
 
 
