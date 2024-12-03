@@ -8,7 +8,6 @@ import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 
-import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -36,11 +35,16 @@ public class ConfigBean {
     @EJB
     private TipoProdutoBean tipoProdutoBean;
 
+    @EJB
+    private ClientBean clientBean;
+
     @PostConstruct
     public void init() {
         System.out.println("\n\nConfigBean init\n\n");
+        clientBean.create("john_doe", "password123", "John Doe", "john.doe@example.com");
+        clientBean.create("jane_doe", "password456", "Jane Doe", "jane.doe@example.com");
 
-        // Create a generic sensor
+        //sensor generico
         sensorBean.create("Generic Sensor 1", 50, false, 0.0f);
 
         // Create a SensorPosicao with specific properties
@@ -58,8 +62,6 @@ public class ConfigBean {
         sensorAceleracaoBean.detectarImpacto(4, 12.0f);
 
         try {
-            System.out.println("\n\nConfigBean init\n\n");
-            // Initialization logic
 
             TipoProduto tipoEletronico = tipoProdutoBean.create("Electronics");
             Produto produto = produtoBean.create("Smartphone", 699.99f, tipoEletronico.getId());
@@ -73,6 +75,5 @@ public class ConfigBean {
         // Create Encomenda
         //encomendaBean.create(new Date(), List.of(volume1));
 
-        System.out.println("\n\nSensors initialized in ConfigBean.\n\n");
     }
 }
