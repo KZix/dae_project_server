@@ -4,11 +4,18 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "volumes")
 public class Volume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String descricao;
+    @Column(nullable = false)
+    private int tipoEmbalagem;
+
+    @ManyToOne
+    @JoinColumn(name = "encomenda_id", nullable = false)
+    private Encomenda encomenda;
 
     @ManyToMany
     private List<Produto> produtos;
@@ -45,5 +52,21 @@ public class Volume {
 
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
+    }
+
+    public int getTipoEmbalagem() {
+        return tipoEmbalagem;
+    }
+
+    public void setTipoEmbalagem(int tipoEmbalagem) {
+        this.tipoEmbalagem = tipoEmbalagem;
+    }
+
+    public Encomenda getEncomenda() {
+        return encomenda;
+    }
+
+    public void setEncomenda(Encomenda encomenda) {
+        this.encomenda = encomenda;
     }
 }

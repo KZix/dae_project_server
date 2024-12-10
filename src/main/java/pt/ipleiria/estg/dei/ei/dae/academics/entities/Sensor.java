@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "sensores")
 public class Sensor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

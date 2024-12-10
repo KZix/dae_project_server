@@ -10,9 +10,18 @@ public class Encomenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private Date dataCriacao;
 
-    @OneToMany
+    @Column(nullable = false)
+    private int cliente;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCriacao = new Date();
+
+    @Column(nullable = false)
+    private int estado;
+
+    @OneToMany(mappedBy = "encomenda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Volume> volumes;
 
     // Constructors
