@@ -13,14 +13,16 @@ public class Sensor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private int volume;
     private boolean estado;
     private float valor;
-    private String name;
-    @Temporal(TemporalType.TIMESTAMP)
-    @OneToMany(mappedBy = "sensor", cascade = CascadeType.ALL)
-    private List<LeituraSensor> leituras = new ArrayList<>();
+
+    @Column(name = "ultima_leitura")
     private Date ultimaLeitura;
+
+    private String name;
+
 
     // Abstract methods for subclasses
 
@@ -86,12 +88,6 @@ public class Sensor {
         this.ultimaLeitura = ultimaLeitura;
     }
 
-    public List<LeituraSensor> getLeituras() {
-        return leituras;
-    }
 
-    public void setLeituras(List<LeituraSensor> leituras) {
-        this.leituras = leituras;
-    }
 }
 

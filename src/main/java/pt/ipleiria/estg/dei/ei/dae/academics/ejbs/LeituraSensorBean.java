@@ -17,12 +17,19 @@ public class LeituraSensorBean {
     public void registerReading(int sensorId, float valor) {
         Sensor sensor = em.find(Sensor.class, sensorId);
         if (sensor != null) {
-            LeituraSensor leitura = new LeituraSensor(sensor, valor, new Date());
+            // Create a new reading for the sensor
+            LeituraSensor leitura = new LeituraSensor();
+            leitura.setSensor(sensor);
+            leitura.setValor(valor);
+            leitura.setTimestamp(new Date());
             em.persist(leitura);
-            sensor.getLeituras().add(leitura);
-            sensor.setUltimaLeitura(new Date());
+
+            // Update the sensor's last reading details
+            sensor.setUltimaLeitura(leitura.getTimestamp());
             sensor.setValor(valor);
             em.merge(sensor);
+        } else {
+            throw new IllegalArgumentException("Sensor with ID " + sensorId + " not found");
         }
     }
 

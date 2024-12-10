@@ -5,6 +5,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorTemperatura;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 
@@ -17,11 +18,6 @@ public class ConfigBean {
     @EJB
     private SensorBean sensorBean;
 
-    @EJB
-    private SensorPosicaoBean sensorPosicaoBean;
-
-    @EJB
-    private SensorAceleracaoBean sensorAceleracaoBean;
 
     @EJB
     private ProdutoBean produtoBean;
@@ -46,12 +42,12 @@ public class ConfigBean {
 
         try {
             // Create sensors
-            int sensorId = sensorBean.create("Temperature Sensor", 50,true,22.1f);
+            SensorTemperatura sensor = sensorBean.createSensorTemperatura("Temperature Sensor", 50,true,22.1f);
 
             // Add readings
-            sensorBean.addSensorReading(sensorId, 22.5f);
-            sensorBean.addSensorReading(sensorId, 23.8f);
-            sensorBean.addSensorReading(sensorId, 21.7f);
+            sensorBean.addSensorReading(sensor.getId(), 22.5f);
+            sensorBean.addSensorReading(sensor.getId(), 23.8f);
+            sensorBean.addSensorReading(sensor.getId(), 21.7f);
         } catch (Exception e) {
             e.printStackTrace();
         }

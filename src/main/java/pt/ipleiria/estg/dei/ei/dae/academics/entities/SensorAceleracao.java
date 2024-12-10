@@ -25,7 +25,7 @@ public class SensorAceleracao extends Sensor {
         return impactoCount;
     }
 
-    public void setImpactoCount(int impactoCount) {
+    public void setImpactCount(int impactoCount) {
         this.impactoCount = impactoCount;
     }
 }
