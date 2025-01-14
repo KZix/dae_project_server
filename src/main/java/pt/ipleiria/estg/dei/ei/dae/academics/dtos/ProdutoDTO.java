@@ -34,4 +34,39 @@ public class ProdutoDTO {
     public static List<ProdutoDTO> from(List<Produto> produtos) {
         return produtos.stream().map(ProdutoDTO::from).collect(Collectors.toList());
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public float getPreco() {
+        return preco;
+    }
+
+    public void setPreco(float preco) {
+        if (preco < 0) {
+            throw new IllegalArgumentException("Preço não pode ser negativo");
+        }
+        this.preco = preco;
+    }
+
+    public int getTipoProduto() {
+        return tipoProduto;
+    }
+
+    public void setTipoProduto(int tipoProduto) {
+        this.tipoProduto = tipoProduto;
+    }
 }
