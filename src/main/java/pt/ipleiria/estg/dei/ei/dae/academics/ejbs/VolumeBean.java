@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
 
 import java.util.List;
 
@@ -13,9 +14,16 @@ public class VolumeBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Volume create(String descricao, List<Produto> produtos) {
+    public Volume create(String descricao, List<Produto> produtos, Encomenda encomenda) {
+        // Criar o volume
         Volume volume = new Volume(descricao, produtos);
+
+        // Associar o volume à encomenda
+        volume.setEncomenda(encomenda);
+
+        // Persistir o volume
         em.persist(volume);
+
         return volume;
     }
 

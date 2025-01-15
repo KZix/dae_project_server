@@ -1,34 +1,22 @@
-package pt.ipleiria.estg.dei.ei.dae.academics.entities;
+package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
-import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Entity
-@Table(name = "encomendas")
-public class Encomenda {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class EncomendaDTO {
+
     private int id;
-
-    @Column(nullable = false)
     private int cliente;
-
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataCriacao = new Date();
-
-    @Column(nullable = false)
+    private Date dataCriacao;
     private int estado;
-
-    @OneToMany(mappedBy = "encomenda", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Volume> volumes;
+    private List<VolumeDTO> volumes;
 
     // Construtores
-    public Encomenda() {
+    public EncomendaDTO() {
     }
 
-    public Encomenda(int cliente, Date dataCriacao, int estado, List<Volume> volumes) {
+    public EncomendaDTO(int id, int cliente, Date dataCriacao, int estado, List<VolumeDTO> volumes) {
+        this.id = id;
         this.cliente = cliente;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
@@ -68,13 +56,11 @@ public class Encomenda {
         this.estado = estado;
     }
 
-    public List<Volume> getVolumes() {
+    public List<VolumeDTO> getVolumes() {
         return volumes;
     }
 
-    public void setVolumes(List<Volume> volumes) {
-        this.volumes =
-
-                volumes;
+    public void setVolumes(List<VolumeDTO> volumes) {
+        this.volumes = volumes;
     }
 }
