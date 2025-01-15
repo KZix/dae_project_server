@@ -8,18 +8,18 @@ public class VolumeDTO {
     private String descricao;
     private int tipoEmbalagem;
     private EncomendaDTO encomenda;
-    //private List<ProdutoDTO> produtos;
+    private List<ProdutoDTO> produtos;
 
     // Construtores
     public VolumeDTO() {
     }
 
-    public VolumeDTO(int id, String descricao, int tipoEmbalagem, EncomendaDTO encomenda /*, List<ProdutoDTO> produtos*/) {
+    public VolumeDTO(int id, String descricao, int tipoEmbalagem, EncomendaDTO encomenda , List<ProdutoDTO> produtos) {
         this.id = id;
         this.descricao = descricao;
         this.tipoEmbalagem = tipoEmbalagem;
         this.encomenda = encomenda;
-        //this.produtos = produtos;
+        this.produtos = produtos;
     }
 
     // Getters e Setters
@@ -54,12 +54,12 @@ public class VolumeDTO {
     public void setEncomenda(EncomendaDTO encomenda) {
         this.encomenda = encomenda;
     }
-/*
+
     public List<ProdutoDTO> getProdutos() {
         return produtos;
     }
 
     public void setProdutos(List<ProdutoDTO> produtos) {
         this.produtos = produtos;
-    }*/
+    }
 }
