@@ -3,6 +3,12 @@ package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 import jakarta.persistence.*;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllProducts",
+                query = "SELECT s FROM Produto s ORDER BY s.nome" // JPQL
+        )
+})
 @Table(name = "produtos")
 
 public class Produto {

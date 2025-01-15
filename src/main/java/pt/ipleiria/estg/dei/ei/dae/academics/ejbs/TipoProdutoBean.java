@@ -3,12 +3,20 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
+
+import java.util.List;
 
 @Stateless
 public class TipoProdutoBean {
     @PersistenceContext
     private EntityManager em;
+
+    public List<TipoProduto> findAll() {
+        // remember, maps to: “SELECT s FROM Produto s ORDER BY s.name”
+        return em.createNamedQuery("getAllTipoProdutos", TipoProduto.class).getResultList();
+    }
 
     public TipoProduto create(String nome) {
         TipoProduto tipoProduto = new TipoProduto(nome);

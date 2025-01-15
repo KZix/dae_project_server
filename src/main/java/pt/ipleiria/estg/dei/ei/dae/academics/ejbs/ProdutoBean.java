@@ -3,8 +3,11 @@ package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Client;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
+
+import java.util.List;
 
 @Stateless
 public class ProdutoBean {
@@ -22,6 +25,11 @@ public class ProdutoBean {
         Produto produto = new Produto(nome, preco, tipoProduto);
         em.persist(produto);
         return produto;
+    }
+
+    public List<Produto> findAll() {
+        // remember, maps to: “SELECT s FROM Produto s ORDER BY s.name”
+        return em.createNamedQuery("getAllProducts", Produto.class).getResultList();
     }
 
     public Produto find(int id) {
