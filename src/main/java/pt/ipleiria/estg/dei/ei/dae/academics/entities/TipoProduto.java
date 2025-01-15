@@ -1,11 +1,14 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllTipoProdutos",
+                query = "SELECT s FROM TipoProduto s ORDER BY s.nome" // JPQL
+        )
+})
 public class TipoProduto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
