@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
 
 import java.util.List;
 
@@ -13,9 +14,26 @@ public class VolumeBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Volume create(String descricao, List<Produto> produtos) {
+    public Volume create(String descricao, List<Produto> produtos, Encomenda encomenda) {
+        // Validar a encomenda
+        if (encomenda == null || !em.contains(encomenda)) {
+            throw new IllegalArgumentException("A encomenda fornecida não está no estado gerenciado ou é nula.");
+        }
+
+        // Validar os produtos
+        for (Produto produto : produtos) {
+            if (produto == null || !em.contains(produto)) {
+                throw new IllegalArgumentException("Um ou mais produtos fornecidos não estão no estado gerenciado ou são nulos.");
+            }
+        }
+
+        // Criar o volume
         Volume volume = new Volume(descricao, produtos);
+        volume.setEncomenda(encomenda);
+
+        // Persistir o volume
         em.persist(volume);
+
         return volume;
     }
 
@@ -37,5 +55,9 @@ public class VolumeBean {
         if (volume != null) {
             em.remove(volume);
         }
+    }
+
+    public List<Volume> findAll() {
+        return em.createQuery("SELECT v FROM Volume v", Volume.class).getResultList();
     }
 }

@@ -8,6 +8,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorTemperatura;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
 
 import java.util.Date;
 import java.util.List;
@@ -15,9 +16,12 @@ import java.util.List;
 @Startup
 @Singleton
 public class ConfigBean {
+
+    @EJB
+    private AdministratorBean administratorBean;
+
     @EJB
     private SensorBean sensorBean;
-
 
     @EJB
     private ProdutoBean produtoBean;
@@ -37,14 +41,17 @@ public class ConfigBean {
     @PostConstruct
     public void init() {
         System.out.println("\n\nConfigBean init\n\n");
+
+        // Criar clientes
         clientBean.create("john_doe", "password123", "John Doe", "john.doe@example.com");
         clientBean.create("jane_doe", "password456", "Jane Doe", "jane.doe@example.com");
+        administratorBean.create("admin", "admin", "John Admin", "admin@example.com");
 
         try {
-            // Create sensors
-            SensorTemperatura sensor = sensorBean.createSensorTemperatura("Temperature Sensor", 50,true,22.1f);
+            // Criar sensores de temperatura
+            SensorTemperatura sensor = sensorBean.createSensorTemperatura("Temperature Sensor", 50, true, 22.1f);
 
-            // Add readings
+            // Adicionar leituras ao sensor
             sensorBean.addSensorReading(sensor.getId(), 22.5f);
             sensorBean.addSensorReading(sensor.getId(), 23.8f);
             sensorBean.addSensorReading(sensor.getId(), 21.7f);
@@ -53,18 +60,24 @@ public class ConfigBean {
         }
 
         try {
-
+            // Criar tipo de produto
             TipoProduto tipoEletronico = tipoProdutoBean.create("Electronics");
             Produto produto = produtoBean.create("Smartphone", 699.99f, tipoEletronico.getId());
+
+            // Criar encomenda sem volumes
+            Encomenda encomenda = encomendaBean.create(1, new Date(), 0);  // Criar encomenda com cliente 1 e estado 0 (sem volumes)
+
+            // Criar volume e associar à encomenda
+            Volume volume = volumeBean.create("Volume 1", List.of(produto), encomenda); // Associando produto ao volume e volume à encomenda
+
+            // Outra encomenda com volumes vazios
+            Encomenda encomenda2 = encomendaBean.create(2, new Date(), 1);  // Encomenda 2 sem volumes ainda
+
+            // Criar outros volumes e associar à encomenda2
+            Produto produto2 = produtoBean.create("Tablet", 499.99f, tipoEletronico.getId());
+            Volume volume2 = volumeBean.create("Volume 2", List.of(produto2), encomenda2);  // Associando produto ao volume2 e associando volume2 à encomenda2
         } catch (Exception e) {
             e.printStackTrace(); // Logs the exact exception
         }
-
-        // Create Volume
-        // Volume volume1 = volumeBean.create("Volume 1", List.of(produto1, produto2));
-
-        // Create Encomenda
-        //encomendaBean.create(new Date(), List.of(volume1));
-
     }
 }

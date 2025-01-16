@@ -24,22 +24,31 @@ public class Encomenda {
     @OneToMany(mappedBy = "encomenda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Volume> volumes;
 
-    // Constructors
+    // Construtores
     public Encomenda() {
     }
 
-    public Encomenda(Date dataCriacao, List<Volume> volumes) {
+    public Encomenda(int cliente, Date dataCriacao, int estado) {
+        this.cliente = cliente;
         this.dataCriacao = dataCriacao;
-        this.volumes = volumes;
+        this.estado = estado;
     }
 
-    // Getters and Setters
+    // Getters e Setters
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(int cliente) {
+        this.cliente = cliente;
     }
 
     public Date getDataCriacao() {
@@ -50,11 +59,21 @@ public class Encomenda {
         this.dataCriacao = dataCriacao;
     }
 
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
     public List<Volume> getVolumes() {
         return volumes;
     }
 
     public void setVolumes(List<Volume> volumes) {
-        this.volumes = volumes;
+        this.volumes =
+
+                volumes;
     }
 }
