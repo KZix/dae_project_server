@@ -56,4 +56,8 @@ public class VolumeBean {
             em.remove(volume);
         }
     }
+
+    public List<Volume> findAll() {
+        return em.createQuery("SELECT v FROM Volume v", Volume.class).getResultList();
+    }
 }

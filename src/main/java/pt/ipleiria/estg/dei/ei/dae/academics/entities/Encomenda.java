@@ -28,11 +28,10 @@ public class Encomenda {
     public Encomenda() {
     }
 
-    public Encomenda(int cliente, Date dataCriacao, int estado, List<Volume> volumes) {
+    public Encomenda(int cliente, Date dataCriacao, int estado) {
         this.cliente = cliente;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
-        this.volumes = volumes;
     }
 
     // Getters e Setters

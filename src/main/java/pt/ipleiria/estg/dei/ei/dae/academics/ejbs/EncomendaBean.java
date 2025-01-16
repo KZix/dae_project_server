@@ -6,6 +6,7 @@ import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,45 +15,29 @@ public class EncomendaBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Encomenda create(int cliente, Date dataCriacao, int estado, List<Volume> volumes) {
-        // Criar a encomenda com cliente, dataCriacao e estado
-        Encomenda encomenda = new Encomenda(cliente, dataCriacao, estado, volumes);
-
-        // Associar volumes à encomenda
-        for (Volume volume : volumes) {
-            volume.setEncomenda(encomenda); // Associar encomenda a cada volume
-        }
-
-        // Persistir a encomenda e os volumes
+    // Criar uma encomenda
+    public Encomenda create(int cliente, Date dataCriacao, int estado) {
+        Encomenda encomenda = new Encomenda(cliente, dataCriacao, estado);
         em.persist(encomenda);
-        for (Volume volume : volumes) {
-            em.persist(volume); // Persistir volumes individualmente
-        }
-
         return encomenda;
     }
 
+    // Buscar todas as encomendas
+    public List<Encomenda> findAll() {
+        return em.createQuery("SELECT e FROM Encomenda e", Encomenda.class).getResultList();
+    }
+
+    // Buscar encomenda por ID
     public Encomenda find(int id) {
         return em.find(Encomenda.class, id);
     }
 
-    public void update(int id, Date dataCriacao, List<Volume> volumes) {
-        Encomenda encomenda = find(id);
-        if (encomenda != null) {
-            encomenda.setDataCriacao(dataCriacao);
-            encomenda.setVolumes(volumes);
-
-            // Reassociar a encomenda a cada volume
-            for (Volume volume : volumes) {
-                volume.setEncomenda(encomenda); // Garantir que a encomenda está associada ao volume
-            }
-
-            em.merge(encomenda);
-            for (Volume volume : volumes) {
-                em.merge(volume); // Atualizar volumes individualmente
-            }
-        }
+    // Adicionar volumes a uma encomenda
+    public void addVolumes(Encomenda encomenda, List<Volume> volumes) {
+        encomenda.getVolumes().addAll(volumes);
+        em.merge(encomenda);
     }
+
 
     public void delete(int id) {
         Encomenda encomenda = find(id);

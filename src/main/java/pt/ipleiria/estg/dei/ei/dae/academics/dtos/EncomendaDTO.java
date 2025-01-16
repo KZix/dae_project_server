@@ -1,7 +1,10 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
+
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EncomendaDTO {
 
@@ -23,6 +26,25 @@ public class EncomendaDTO {
         this.volumes = volumes;
     }
 
+    public static EncomendaDTO from(Encomenda encomenda) {
+        if (encomenda == null) {
+            return null;
+        }
+
+        // Converte a lista de volumes para o formato DTO
+        List<VolumeDTO> volumesDTO = encomenda.getVolumes().stream()
+                .map(VolumeDTO::from)
+                .collect(Collectors.toList());
+
+        // Retorna o EncomendaDTO com os valores da entidade Encomenda
+        return new EncomendaDTO(
+                encomenda.getId(),
+                encomenda.getCliente(),
+                encomenda.getDataCriacao(),
+                encomenda.getEstado(),
+                volumesDTO
+        );
+    }
     // Getters e Setters
     public int getId() {
         return id;

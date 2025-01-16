@@ -1,6 +1,9 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VolumeDTO {
 
@@ -22,6 +25,25 @@ public class VolumeDTO {
         this.produtos = produtos;
     }
 
+    public static VolumeDTO from(Volume volume) {
+        if (volume == null) {
+            return null;
+        }
+
+        // Converte os produtos e encomenda para seus respectivos DTOs
+        EncomendaDTO encomendaDTO = EncomendaDTO.from(volume.getEncomenda());
+        List<ProdutoDTO> produtosDTO = volume.getProdutos().stream()
+                .map(ProdutoDTO::from)
+                .collect(Collectors.toList());
+
+        return new VolumeDTO(
+                volume.getId(),
+                volume.getDescricao(),
+                volume.getTipoEmbalagem(),
+                encomendaDTO,
+                produtosDTO
+        );
+    }
     // Getters e Setters
     public int getId() {
         return id;
