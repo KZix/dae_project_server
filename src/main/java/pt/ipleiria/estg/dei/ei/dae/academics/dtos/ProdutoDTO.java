@@ -9,7 +9,8 @@ public class ProdutoDTO {
     private int id;
     private String nome;
     private float preco;
-    private int tipoProduto;
+    private int tipoProdutoId;
+
 
     public ProdutoDTO() {
 
@@ -19,7 +20,8 @@ public class ProdutoDTO {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
-        this.tipoProduto = tipoProduto;
+        this.tipoProdutoId = tipoProduto;
+
     }
 
     public static ProdutoDTO from(Produto produto) {
@@ -28,6 +30,7 @@ public class ProdutoDTO {
                 produto.getNome(),
                 produto.getPreco(),
                 produto.getTipoProduto().getId()
+
         );
     }
 
@@ -58,11 +61,11 @@ public class ProdutoDTO {
         this.preco = preco;
     }
 
-    public int getTipoProduto() {
-        return tipoProduto;
+    public int getTipoProdutoId() {
+        return tipoProdutoId;
     }
 
-    public void setTipoProduto(int tipoProduto) {
-        this.tipoProduto = tipoProduto;
+    public void setTipoProdutoId(int tipoProdutoId) {
+        this.tipoProdutoId = tipoProdutoId;
     }
 }

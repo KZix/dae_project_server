@@ -13,7 +13,11 @@ import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationExc
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("produtos") // relative url web path for this service
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
@@ -30,6 +34,27 @@ public class ProdutoService {
     }
 
     @GET
+    @Path("complete")
+    public List<Map<String, Object>> getAllProductsWithType() {
+        List<Produto> produtos = produtoBean.findAll();
+
+        return produtos.stream().map(produto -> {
+            Map<String, Object> produtoMap = new LinkedHashMap<>();
+            produtoMap.put("id", produto.getId());
+            produtoMap.put("nome", produto.getNome());
+            produtoMap.put("preco", produto.getPreco());
+
+            Map<String, Object> tipoProdutoMap = new LinkedHashMap<>();
+            tipoProdutoMap.put("id", produto.getTipoProduto().getId());
+            tipoProdutoMap.put("nome", produto.getTipoProduto().getNome());
+
+
+            produtoMap.put("tipoProduto", tipoProdutoMap);
+            return produtoMap;
+        }).collect(Collectors.toList());
+    }
+
+    @GET
     @Path("{produtoId}")
     public Response getProductById(@PathParam("produtoId") int id){
         return Response.ok(ProdutoDTO.from(produtoBean.find(id))).build();
@@ -42,7 +67,7 @@ public class ProdutoService {
             Produto produto = produtoBean.create(
                     produtoDTO.getNome(),
                     produtoDTO.getPreco(),
-                    produtoDTO.getTipoProduto()
+                    produtoDTO.getTipoProdutoId()
             );
             return Response.status(Response.Status.CREATED).entity(ProdutoDTO.from(produto)).build();
         } catch (IllegalArgumentException e) {
@@ -54,7 +79,7 @@ public class ProdutoService {
     @Path("{produtoId}")
     public Response update(@PathParam("produtoId") int id, ProdutoDTO produtoDTO) {
         try {
-            produtoBean.update(id, produtoDTO.getNome(), produtoDTO.getPreco(), produtoDTO.getTipoProduto());
+            produtoBean.update(id, produtoDTO.getNome(), produtoDTO.getPreco(), produtoDTO.getTipoProdutoId());
             Produto updatedProduto = produtoBean.find(id);
             if (updatedProduto == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("Produto não encontrado").build();
