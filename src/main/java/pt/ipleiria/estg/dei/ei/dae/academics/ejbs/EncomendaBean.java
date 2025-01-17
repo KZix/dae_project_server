@@ -16,8 +16,8 @@ public class EncomendaBean {
     private EntityManager em;
 
     // Criar uma encomenda
-    public Encomenda create(int cliente, Date dataCriacao, int estado) {
-        Encomenda encomenda = new Encomenda(cliente, dataCriacao, estado);
+    public Encomenda create(String clienteUsername, Date dataCriacao, int estado) {
+        Encomenda encomenda = new Encomenda(clienteUsername, dataCriacao, estado);
         em.persist(encomenda);
         return encomenda;
     }

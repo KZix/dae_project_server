@@ -65,13 +65,13 @@ public class ConfigBean {
             Produto produto = produtoBean.create("Smartphone", 699.99f, tipoEletronico.getId());
 
             // Criar encomenda sem volumes
-            Encomenda encomenda = encomendaBean.create(1, new Date(), 0);  // Criar encomenda com cliente 1 e estado 0 (sem volumes)
+            Encomenda encomenda = encomendaBean.create("john_doe", new Date(), 0);  // Criar encomenda com cliente 1 e estado 0 (sem volumes)
 
             // Criar volume e associar à encomenda
             Volume volume = volumeBean.create("Volume 1", List.of(produto), encomenda); // Associando produto ao volume e volume à encomenda
 
             // Outra encomenda com volumes vazios
-            Encomenda encomenda2 = encomendaBean.create(2, new Date(), 1);  // Encomenda 2 sem volumes ainda
+            Encomenda encomenda2 = encomendaBean.create("jane_doe", new Date(), 1);  // Encomenda 2 sem volumes ainda
 
             // Criar outros volumes e associar à encomenda2
             Produto produto2 = produtoBean.create("Tablet", 499.99f, tipoEletronico.getId());

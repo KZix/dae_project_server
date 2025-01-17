@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class EncomendaDTO {
 
     private int id;
-    private int cliente;
+    private String clienteUsername;
     private Date dataCriacao;
     private int estado;
     private List<VolumeDTO> volumes;
@@ -18,9 +18,9 @@ public class EncomendaDTO {
     public EncomendaDTO() {
     }
 
-    public EncomendaDTO(int id, int cliente, Date dataCriacao, int estado, List<VolumeDTO> volumes) {
+    public EncomendaDTO(int id, String clienteUsername, Date dataCriacao, int estado, List<VolumeDTO> volumes) {
         this.id = id;
-        this.cliente = cliente;
+        this.clienteUsername = clienteUsername;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
         this.volumes = volumes;
@@ -39,7 +39,7 @@ public class EncomendaDTO {
         // Retorna o EncomendaDTO com os valores da entidade Encomenda
         return new EncomendaDTO(
                 encomenda.getId(),
-                encomenda.getCliente(),
+                encomenda.getClienteUsername(),
                 encomenda.getDataCriacao(),
                 encomenda.getEstado(),
                 volumesDTO
@@ -54,12 +54,11 @@ public class EncomendaDTO {
         this.id = id;
     }
 
-    public int getCliente() {
-        return cliente;
+    public String getClienteUsername() {
+        return clienteUsername;
     }
-
-    public void setCliente(int cliente) {
-        this.cliente = cliente;
+    public void setClienteUsername(String clienteUsername) {
+        this.clienteUsername = clienteUsername;
     }
 
     public Date getDataCriacao() {
