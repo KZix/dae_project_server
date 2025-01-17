@@ -31,7 +31,7 @@ public class EncomendaService {
         try {
             // Criar a encomenda com os dados fornecidos (sem volumes)
             Encomenda encomenda = encomendaBean.create(
-                    encomendaDTO.getCliente(),
+                    encomendaDTO.getClienteUsername(),
                     encomendaDTO.getDataCriacao(),
                     encomendaDTO.getEstado()
             );

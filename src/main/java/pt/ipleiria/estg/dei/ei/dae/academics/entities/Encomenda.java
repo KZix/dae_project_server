@@ -11,8 +11,8 @@ public class Encomenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private int cliente;
+    @Column(name = "cliente_username", nullable = false)
+    private String clienteUsername;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -28,12 +28,11 @@ public class Encomenda {
     public Encomenda() {
     }
 
-    public Encomenda(int cliente, Date dataCriacao, int estado) {
-        this.cliente = cliente;
+    public Encomenda(String clienteUsername, Date dataCriacao, int estado) {
+        this.clienteUsername = clienteUsername;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
     }
-
     // Getters e Setters
     public int getId() {
         return id;
@@ -43,12 +42,13 @@ public class Encomenda {
         this.id = id;
     }
 
-    public int getCliente() {
-        return cliente;
+
+    public String getClienteUsername() {
+        return clienteUsername;
     }
 
-    public void setCliente(int cliente) {
-        this.cliente = cliente;
+    public void setClienteUsername(String clienteUsername) {
+        this.clienteUsername = clienteUsername;
     }
 
     public Date getDataCriacao() {
