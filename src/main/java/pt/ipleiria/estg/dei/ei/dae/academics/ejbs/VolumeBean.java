@@ -86,7 +86,7 @@ public class VolumeBean {
 
     }
 
-    public Volume findWithProduts(int idVolume) {
+    public Volume findWithProducts(int idVolume) {
         var volume = this.find(idVolume);
         Hibernate.initialize(volume.getProdutos());
         return volume;

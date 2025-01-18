@@ -9,7 +9,9 @@ import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.VolumeBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Path("volumes") // Relative URL for this service
@@ -33,8 +35,37 @@ public class VolumeService {
     @Path("{id}")
     public Response getVolumeById(@PathParam("id") int id) {
         try {
-            Volume volume = volumeBean.find(id);
-            return Response.ok(VolumeDTO.from(volume)).build();
+            Volume volume = volumeBean.findWithProducts(id); // Corrigir "produts" para "products"
+
+            if (volume == null) {
+                throw new IllegalArgumentException("Volume not found with ID: " + id);
+            }
+
+            // Mapeando os dados do volume
+            Map<String, Object> volumeMap = new LinkedHashMap<>();
+            volumeMap.put("id", volume.getId());
+            volumeMap.put("descricao", volume.getDescricao());
+            volumeMap.put("danificada", volume.getDanificada());
+            volumeMap.put("encomendaId", volume.getEncomenda().getId());
+
+            // Mapeando os produtos do volume
+            List<Map<String, Object>> produtos = volume.getProdutos().stream().map(produto -> {
+                Map<String, Object> produtoMap = new LinkedHashMap<>();
+                produtoMap.put("id", produto.getId());
+                produtoMap.put("nome", produto.getNome());
+                produtoMap.put("preco", produto.getPreco());
+
+                Map<String, Object> tipoProdutoMap = new LinkedHashMap<>();
+                tipoProdutoMap.put("id", produto.getTipoProduto().getId());
+                tipoProdutoMap.put("nome", produto.getTipoProduto().getNome());
+
+                produtoMap.put("tipoProduto", tipoProdutoMap);
+                return produtoMap;
+            }).collect(Collectors.toList());
+
+            volumeMap.put("produtos", produtos);
+
+            return Response.ok(volumeMap).build();
         } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
