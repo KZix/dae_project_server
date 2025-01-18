@@ -106,6 +106,7 @@ public class VolumeBean {
         }
     }
 
+
     public void update(int id,String descricao, int danificada, int encomenda_id) {
         Volume volume = em.find(Volume.class, id);
         if (volume == null) {
