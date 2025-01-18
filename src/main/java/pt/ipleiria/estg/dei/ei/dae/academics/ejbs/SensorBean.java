@@ -9,6 +9,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorAceleracao;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorPosicao;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorTemperatura;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -67,6 +68,55 @@ public class SensorBean {
 
     public void addSensorReading(int sensorId, float valor) {
         leituraSensorBean.registerReading(sensorId, valor);
+    }
+
+    public void deleteSensor(int id) {
+        Sensor sensor = findSensor(id);
+        if (sensor != null) {
+            em.remove(sensor);
+        } else {
+            throw new IllegalArgumentException("Sensor with ID " + id + " not found.");
+        }
+    }
+
+    public Sensor findSensor(int id) {
+        return em.find(Sensor.class, id);
+    }
+
+    public void updateSensor(int id, int volume, boolean estado) {
+        Sensor sensor = findSensor(id);
+        if (sensor != null) {
+            sensor.setVolume(volume);
+            sensor.setEstado(estado);
+            sensor.setUltimaLeitura(new Date()); // Update the last read time
+            em.merge(sensor);
+        } else {
+            throw new IllegalArgumentException("Sensor with ID " + id + " not found.");
+        }
+    }
+
+    public List<Sensor> getAllSensors() {
+        return em.createQuery("SELECT s FROM Sensor s", Sensor.class).getResultList();
+    }
+
+    public boolean detectImpact(int id, float acceleration) {
+        Sensor sensor = findSensor(id);
+        if (sensor instanceof SensorAceleracao) {
+            SensorAceleracao sensorAceleracao = (SensorAceleracao) sensor;
+            return sensorAceleracao.detectarImpacto(acceleration);
+        } else {
+            throw new IllegalArgumentException("Sensor with ID " + id + " is not a SensorAceleracao.");
+        }
+    }
+
+    public int getImpactCount(int id) {
+        Sensor sensor = findSensor(id);
+        if (sensor instanceof SensorAceleracao) {
+            SensorAceleracao sensorAceleracao = (SensorAceleracao) sensor;
+            return sensorAceleracao.getImpactoCount();
+        } else {
+            throw new IllegalArgumentException("Sensor with ID " + id + " is not a SensorAceleracao.");
+        }
     }
 
 }
