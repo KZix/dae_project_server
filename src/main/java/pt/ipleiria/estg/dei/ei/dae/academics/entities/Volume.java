@@ -30,6 +30,9 @@ public class Volume {
     @ManyToMany(mappedBy = "volumes")
     private List<Produto> produtos;
 
+    @ManyToOne
+    private Sensor assignedSensor;
+
     // Constructors
     public Volume() {
         this.produtos= new LinkedList<>();
@@ -82,5 +85,13 @@ public class Volume {
 
     public void setEncomenda(Encomenda encomenda) {
         this.encomenda = encomenda;
+    }
+
+    public Sensor getAssignedSensor() {
+        return assignedSensor;
+    }
+
+    public void setAssignedSensor(Sensor assignedSensor) {
+        this.assignedSensor = assignedSensor;
     }
 }

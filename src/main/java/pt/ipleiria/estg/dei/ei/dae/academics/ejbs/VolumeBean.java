@@ -7,6 +7,7 @@ import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
 import jakarta.validation.ConstraintViolationException;
 import org.hibernate.Hibernate;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
@@ -25,6 +26,8 @@ public class VolumeBean {
 
     @EJB
     private EncomendaBean encomendaBean;
+    @EJB
+    private SensorBean sensorBean;
 
     public Volume create(String descricao, int danificada, int encomenda_id)
             throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
@@ -152,6 +155,17 @@ public class VolumeBean {
         }
         em.merge(volume);
     }
+
+    public void assignSensor(int volumeId, int sensorId) {
+        Volume volume = find(volumeId);
+        Sensor sensor = sensorBean.findSensor(sensorId);
+        if (volume == null || sensor == null) {
+            throw new IllegalArgumentException("Volume or Sensor not found.");
+        }
+        volume.setAssignedSensor(sensor);
+        em.merge(volume);
+    }
+
 
     public List<Volume> findAll() {
         return em.createNamedQuery("getAllVolumes", Volume.class).getResultList();
