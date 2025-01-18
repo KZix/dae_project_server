@@ -6,8 +6,10 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.EncomendaDTO;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.ProdutoDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.EncomendaBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 
 import java.util.List;
@@ -59,6 +61,21 @@ public class EncomendaService {
             return Response.status(Response.Status.NOT_FOUND).entity("Encomenda não encontrada").build();
         }
         return Response.ok(EncomendaDTO.from(encomenda)).build();
+    }
+
+    @PUT
+    @Path("{encomendaId}")
+    public Response update(@PathParam("encomendaId") int id, EncomendaDTO encomendaDTO) {
+        try {
+            encomendaBean.update(id, encomendaDTO.getEstado());
+            Encomenda updateEncomenda = encomendaBean.find(id);
+            if (updateEncomenda == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("Encomenda não encontrada").build();
+            }
+            return Response.ok(EncomendaDTO.from(updateEncomenda)).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 
 }
