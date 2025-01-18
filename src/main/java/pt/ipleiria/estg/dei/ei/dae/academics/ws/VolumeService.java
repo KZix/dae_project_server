@@ -4,6 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SensorDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.VolumeDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.VolumeBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
@@ -129,4 +130,18 @@ public class VolumeService {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
+
+    @POST
+    @Path("/{volumeId}/assign-sensor")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response assignSensorToVolume(@PathParam("volumeId") int volumeId, SensorDTO sensorDTO) {
+        try {
+            volumeBean.assignSensor(volumeId, sensorDTO.getId());
+            return Response.ok("Sensor assigned successfully.").build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to assign sensor: " + e.getMessage()).build();
+        }
+    }
+
 }
