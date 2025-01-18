@@ -84,29 +84,6 @@ public class VolumeService {
 
     @PUT
     @Path("{id}")
-    public Response updateProdutosVolume(@PathParam("id") int id, VolumeDTO volumeDTO) {
-        try {
-            // Extrair os IDs dos produtos do VolumeDTO
-            List<Integer> produtoIds = volumeDTO.getProdutos()
-                    .stream()
-                    .map(produtoDTO -> produtoDTO.getId())
-                    .collect(Collectors.toList());
-
-            // Atualizar o volume usando os IDs dos produtos
-            volumeBean.update(id, volumeDTO.getDescricao(), produtoIds);
-
-            // Retornar o volume atualizado
-            Volume updatedVolume = volumeBean.find(id);
-            return Response.ok(VolumeDTO.from(updatedVolume)).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
-    }
-
-    @PUT
-    @Path("{id}")
     public Response updateVolume(@PathParam("id") int id, VolumeDTO volumeDTO) {
         try {
             // Atualizar o volume usando os IDs dos produtos
