@@ -6,11 +6,11 @@ import java.util.Date;
 
 @Entity
 public class SensorPosicao extends Sensor {
-    private float intervalo;
+    private float posicao;
 
     // Method to define the position reading interval
-    public void definirIntervalo(float intervalo) {
-        this.intervalo = intervalo;
+    public void definirPosicao(float posicao) {
+        this.posicao = posicao;
     }
 
     // Method to retrieve the current position (mock implementation)
@@ -19,12 +19,14 @@ public class SensorPosicao extends Sensor {
     }
 
     // Getters and Setters
-    public float getIntervalo() {
-        return intervalo;
+    public float getPosicao() {
+        return posicao;
     }
 
-    public void setIntervalo(float intervalo) {
-        this.intervalo = intervalo;
+    public void setPosicao(float posicao) {
+        this.posicao = posicao;
     }
+
+
 }
 

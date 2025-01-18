@@ -55,5 +55,8 @@ public class SensorDTO {
     public void setUltimaLeitura(Date ultimaLeitura) {
         this.ultimaLeitura = ultimaLeitura;
     }
+
+
+
 }
 

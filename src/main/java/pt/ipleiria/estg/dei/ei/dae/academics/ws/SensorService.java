@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SensorDTO;
+import pt.ipleiria.estg.dei.ei.dae.academics.dtos.SensorTemperaturaDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.SensorBean;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Sensor;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorAceleracao;
@@ -160,6 +161,96 @@ public class SensorService {
         }
         return Response.status(Response.Status.BAD_REQUEST).entity("Sensor is not of type SensorAceleracao").build();
     }
+
+    @POST
+    @Path("/temperatura/{sensorId}/readings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addTemperatureReading(@PathParam("sensorId") int sensorId, float temperature) {
+        try {
+            Sensor sensor = sensorBean.findSensor(sensorId);
+            if (!(sensor instanceof SensorTemperatura)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Sensor ID " + sensorId + " is not a temperature sensor.")
+                        .build();
+            }
+
+            // Assuming you have a method to handle adding readings for SensorTemperatura
+            boolean success = sensorBean.addTemperatureReading(sensorId, temperature);
+            if (success) {
+                return Response.ok("Temperature reading added successfully.").build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Failed to add temperature reading.")
+                        .build();
+            }
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @POST
+    @Path("/posicao/{sensorId}/readings")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addPositionReading(@PathParam("sensorId") int sensorId, float position) {
+        try {
+            Sensor sensor = sensorBean.findSensor(sensorId);
+            if (!(sensor instanceof SensorPosicao)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Sensor ID " + sensorId + " is not a position sensor.")
+                        .build();
+            }
+
+            // Assuming you have a method to handle adding readings for SensorPosicao
+            boolean success = sensorBean.addPositionReading(sensorId, position);
+            if (success) {
+                return Response.ok("Position reading added successfully.").build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Failed to add position reading.")
+                        .build();
+            }
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    @PUT
+    @Path("/{sensorId}/update-threshold")
+    public Response updateThreshold(@PathParam("sensorId") int sensorId, SensorTemperaturaDTO sensorTemperaturaDTO) {
+        try {
+            sensorBean.updateSensorTemperaturaThreshold(sensorId, sensorTemperaturaDTO.getThreshold());
+            return Response.status(Response.Status.OK).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Error updating threshold").build();
+        }
+    }
+
+    // Endpoint to add a temperature reading and check if it is below the threshold
+    @POST
+    @Path("/{sensorId}/reading")
+    public Response addTemperatureReading(@PathParam("sensorId") int sensorId, SensorDTO sensorDTO) {
+        boolean isBelowThreshold = sensorBean.registerTemperatureReading(sensorId, sensorDTO.getValor());
+        if (isBelowThreshold) {
+            return Response.status(Response.Status.CREATED)
+                    .entity("Temperature reading added. Below threshold count incremented.")
+                    .build();
+        } else {
+            return Response.status(Response.Status.CREATED)
+                    .entity("Temperature reading added. Not below threshold.")
+                    .build();
+        }
+    }
+
+    // Endpoint to get the count of temperature readings below the threshold
+    @GET
+    @Path("/{sensorId}/below-threshold-count")
+    public Response getBelowThresholdCount(@PathParam("sensorId") int sensorId) {
+        int count = sensorBean.getBelowThresholdCount(sensorId);
+        return Response.ok().entity("Below threshold count: " + count).build();
+    }
+
 
     // Helper method to map a Sensor entity to a SensorDTO
     private SensorDTO toDTO(Sensor sensor) {
