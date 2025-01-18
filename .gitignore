@@ -37,3 +37,5 @@ VS Code
 
 Mac OS
 .DS_Store
+
+.idea/httpRequests/*
