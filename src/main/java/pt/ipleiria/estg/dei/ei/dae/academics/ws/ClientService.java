@@ -63,14 +63,11 @@ public class ClientService {
     @GET
     @Path("{username}")
     public Response getClient(@PathParam("username") String username) {
-        var principal = securityContext.getUserPrincipal();
-
-        if(!principal.getName().equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
         var client = clientBean.find(username);
-        var clientDTO = ClientDTO.from(client);
-        return Response.ok(clientDTO).build();
+        if (client == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Cliente não encontrado").build();
+        }
+        return Response.ok(ClientDTO.from(client)).build();
     }
 
     @PUT

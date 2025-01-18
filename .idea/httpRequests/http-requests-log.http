@@ -1,3 +1,193 @@
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Accept: application/json
+Content-Length: 21
+Content-Type: */*; charset=UTF-8
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos":[ 2]
+}
+
+<> 2025-01-18T222143.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Accept: application/json
+Content-Length: 21
+Content-Type: */*; charset=UTF-8
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos":[ 2]
+}
+
+<> 2025-01-18T222141.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 12
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  [1, 2]
+}
+
+<> 2025-01-18T222015.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 24
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1, 2]
+}
+
+<> 2025-01-18T221542.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+<> 2025-01-18T221220.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+<> 2025-01-18T221017.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+<> 2025-01-18T220658.500.json
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/removeProdutos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 21
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+}
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/produtos
+Content-Type: application/json
+Accept: application/json
+Content-Length: 22
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "produtos": [1]
+
+}
+
+###
+
+DELETE http://localhost:8080/academics/api/volumes/1/produtos/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+###
+
 PUT http://localhost:8080/academics/api/volumes/3
 Content-Type: application/json
 Accept: application/json
@@ -408,110 +598,6 @@ GET http://localhost:8080/academics/api/encomendas/1/details
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
 Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-GET http://localhost:8080/academics/api/encomendas/1/details
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-GET http://localhost:8080/academics/api/encomendas/1/details
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-###
-
-GET http://localhost:8080/academics/api/encomendas
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T115122.200.json
-
-###
-
-GET http://localhost:8080/academics/api/encomendas
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T015542.200.json
-
-###
-
-GET http://localhost:8080/api/produtos
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T005715.404.html
-
-###
-
-GET http://localhost:8080/api/produtos
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T003731.404.html
-
-###
-
-GET http://localhost:8080/api/produtos
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T003730.404.html
-
-###
-
-GET http://localhost:8080/api/produtos
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T003649.404.html
-
-###
-
-GET http://localhost:8080/api/produtos
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T002120.404.html
-
-###
-
-GET http://localhost:8080/api/encomendas
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T002050.404.html
-
-###
-
-GET http://localhost:8080/api/client
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T001757.404.html
-
-###
-
-GET http://localhost:8080/api/encomendas
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.13 (Java/17.0.5)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-01-18T001747.404.html
 
 ###
 

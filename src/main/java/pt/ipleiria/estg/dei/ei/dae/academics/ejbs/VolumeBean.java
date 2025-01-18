@@ -105,7 +105,33 @@ public class VolumeBean {
             em.remove(volume);
         }
     }
+    public void removeProdutosFromVolume(List<Integer> produtoIds, int idVolume) {
+        // Retrieve the Volume object
+        Volume volume = em.find(Volume.class, idVolume);
+        if (volume == null) {
+            throw new IllegalArgumentException("Volume com o id " + idVolume + " nao encontrado.");
+        }
 
+        // Loop through the provided produtoIds
+        for (Integer produtoId : produtoIds) {
+            Produto produto = em.find(Produto.class, produtoId);
+            if (produto == null) {
+                throw new IllegalArgumentException("Produto com o ID " + produtoId + " nao encontrado.");
+            }
+
+            // Remove associations between the Volume and Produto
+            if (volume.getProdutos().contains(produto)) {
+                volume.getProdutos().remove(produto);
+                produto.getVolumes().remove(volume);
+                em.merge(produto); // Persist changes to Produto
+            } else {
+                System.err.println("Produto with ID " + produtoId + " is not associated with Volume " + idVolume);
+            }
+        }
+
+        // Persist changes to Volume
+        em.merge(volume);
+    }
 
     public void update(int id,String descricao, int danificada, int encomenda_id) {
         Volume volume = em.find(Volume.class, id);

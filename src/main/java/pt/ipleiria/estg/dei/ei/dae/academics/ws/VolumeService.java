@@ -111,6 +111,17 @@ public class VolumeService {
         }
     }
 
+    @DELETE
+    @Path("{id}/removeProdutos")
+    public Response deleteProdutosVolume(@PathParam("id") int id, List<Integer> produtoId) {
+        try {
+            volumeBean.removeProdutosFromVolume(produtoId, id);
+            return Response.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
     @POST
     @Path("{id}/produtos")
     public Response addProdutosToVolume(@PathParam("id") int volumeId, List<Integer> produtoIds) {
