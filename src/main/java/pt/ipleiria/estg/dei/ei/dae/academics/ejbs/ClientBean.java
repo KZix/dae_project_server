@@ -64,8 +64,7 @@ public class ClientBean {
 
     
 
-    public void update(String username, String password, String name, String email,
-                       long courseCode) {
+    public void update(String username, String password, String name, String email) {
         Client client = entityManager.find(Client.class, username);
         if (client == null) {
             System.err.println("ERROR_STUDENT_NOT_FOUND: " + username);

@@ -15,9 +15,6 @@ public class ClientDTO implements Serializable {
     private String name;
     private String email;
 
-    private long courseCode;
-    private String courseName;
-
     // Default constructor
     public ClientDTO() {
     }
@@ -60,22 +57,7 @@ public class ClientDTO implements Serializable {
     public String getEmail() {
         return email;
     }
-
-    public long getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(long courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
+    
     public void setEmail(String email) {
         this.email = email;
     }

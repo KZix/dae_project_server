@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON}) // injects header “Content-Type: application/json”
 @Consumes({MediaType.APPLICATION_JSON}) // injects header “Accept: application/json”
 @Authenticated
-@RolesAllowed({"Teacher", "Administrator"})
+@RolesAllowed({"Administrator"})
 public class ClientService {
     @EJB
     private ClientBean clientBean;
@@ -80,8 +80,7 @@ public class ClientService {
                 username,
                 clientDTO.getPassword(),
                 clientDTO.getName(),
-                clientDTO.getEmail(),
-                clientDTO.getCourseCode()
+                clientDTO.getEmail()
         );
         // Retrieve the updated client for response
         var client = clientBean.find(username);
