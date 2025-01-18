@@ -1,16 +1,16 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
 public class SensorTemperaturaDTO extends SensorDTO {
-    private float intervalo;
+    private float threshold;
 
     // Getters and setters
 
-    public float getIntervalo() {
-        return intervalo;
+    public float getThreshold() {
+        return threshold;
     }
 
-    public void setIntervalo(float intervalo) {
-        this.intervalo = intervalo;
+    public void setThreshold(float threshold) {
+        this.threshold = threshold;
     }
 }
 

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.LeituraSensor;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Sensor;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorAceleracao;
 
 import java.util.Date;
 import java.util.List;
@@ -16,21 +17,23 @@ public class LeituraSensorBean {
 
     public void registerReading(int sensorId, float valor) {
         Sensor sensor = em.find(Sensor.class, sensorId);
-        if (sensor != null) {
-            // Create a new reading for the sensor
-            LeituraSensor leitura = new LeituraSensor();
-            leitura.setSensor(sensor);
-            leitura.setValor(valor);
-            leitura.setTimestamp(new Date());
-            em.persist(leitura);
+        if (sensor instanceof SensorAceleracao) {
+            // Cast to SensorAceleracao
+            SensorAceleracao sensorAceleracao = (SensorAceleracao) sensor;
 
-            // Update the sensor's last reading details
-            sensor.setUltimaLeitura(leitura.getTimestamp());
-            sensor.setValor(valor);
-            em.merge(sensor);
-        } else {
-            throw new IllegalArgumentException("Sensor with ID " + sensorId + " not found");
+            // Detect impact based on the provided value
+            if (sensorAceleracao.detectarImpacto(valor)) {
+                // If an impact is detected, update the impact count in the database
+                sensorAceleracao.setImpactoCount(sensorAceleracao.getImpactoCount());
+                // Persist changes if necessary
+            }
         }
+        // Persist the reading
+        LeituraSensor leituraSensor = new LeituraSensor();
+        leituraSensor.setValor(valor);
+        leituraSensor.setSensor(sensor);
+        leituraSensor.setTimestamp(new Date());
+        em.persist(leituraSensor);
     }
 
     public List<LeituraSensor> listReadingsBySensor(int sensorId) {

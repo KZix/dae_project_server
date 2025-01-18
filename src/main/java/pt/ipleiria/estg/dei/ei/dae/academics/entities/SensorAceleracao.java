@@ -6,27 +6,24 @@ import jakarta.persistence.Entity;
 public class SensorAceleracao extends Sensor {
     private int impactoCount = 0; // Counter for detected impacts
 
-    // Method to detect an impact based on acceleration
+
     public boolean detectarImpacto(float aceleracao) {
-        if (aceleracao > 9.8) { // Example threshold for impact detection
+        float limiarImpacto = 9.8f; // Threshold for impact detection (example: Earth's gravity)
+
+        if (aceleracao > limiarImpacto) {
             impactoCount++;
-            return true;
+            return true; // Impact detected
         }
-        return false;
+        return false; // No impact detected
     }
 
-    // Method to get the total number of impacts detected
-    public int obterImpactos() {
-        return impactoCount;
-    }
 
     // Getters and Setters
     public int getImpactoCount() {
         return impactoCount;
     }
 
-    public void setImpactCount(int impactoCount) {
+    public void setImpactoCount(int impactoCount) {
         this.impactoCount = impactoCount;
     }
 }
-
