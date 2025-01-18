@@ -1,0 +1,35 @@
+{
+  "id": 1,
+  "descricao": "Volume 1",
+  "danificada": 0,
+  "encomendaId": 1,
+  "produtos": [
+    {
+      "id": 1,
+      "nome": "Smartphone",
+      "preco": 699.99,
+      "tipoProduto": {
+        "id": 1,
+        "nome": "Eletrônicos"
+      }
+    },
+    {
+      "id": 2,
+      "nome": "Tablet",
+      "preco": 499.99,
+      "tipoProduto": {
+        "id": 1,
+        "nome": "Eletrônicos"
+      }
+    },
+    {
+      "id": 3,
+      "nome": "Microondas",
+      "preco": 150.0,
+      "tipoProduto": {
+        "id": 2,
+        "nome": "Domésticos"
+      }
+    }
+  ]
+}

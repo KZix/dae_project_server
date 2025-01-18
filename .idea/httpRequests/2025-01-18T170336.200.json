@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3,
+    "nome": "Microondas",
+    "preco": 150.0,
+    "tipoProdutoId": 2
+  },
+  {
+    "id": 1,
+    "nome": "Smartphone",
+    "preco": 699.99,
+    "tipoProdutoId": 1
+  },
+  {
+    "id": 2,
+    "nome": "Tablet",
+    "preco": 499.99,
+    "tipoProdutoId": 1
+  }
+]
