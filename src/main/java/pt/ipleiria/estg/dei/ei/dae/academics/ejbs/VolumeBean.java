@@ -142,7 +142,7 @@ public class VolumeBean {
             System.err.println("ERROR_VOLUME_NOT_FOUND: " + id);
             return;
         }
-        em.lock(volume, LockModeType.OPTIMISTIC);
+
         volume.setDescricao(descricao);
         volume.setDanificada(danificada);
         if (volume.getEncomenda().getId() != encomenda_id) {
