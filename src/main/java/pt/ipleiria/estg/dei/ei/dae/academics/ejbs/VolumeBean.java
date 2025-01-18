@@ -14,6 +14,7 @@ import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationExc
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -95,6 +96,12 @@ public class VolumeBean {
     public void delete(int id) {
         Volume volume = find(id);
         if (volume != null) {
+            // Desassociar todos os produtos do volume
+            for (Produto produto : new ArrayList<>(volume.getProdutos())) {
+                produto.getVolumes().remove(volume); // Remover o volume da lista de produtos
+                volume.getProdutos().remove(produto); // Remover o produto da lista do volume
+            }
+            // Remover o volume
             em.remove(volume);
         }
     }
