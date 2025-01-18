@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class SensorDTO {
     private int id;
+    private String name;
     private int volume;
     private boolean estado;
     private float valor;
@@ -18,6 +19,10 @@ public class SensorDTO {
     public void setId(int id) {
         this.id = id;
     }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {}
 
     public int getVolume() {
         return volume;
@@ -50,5 +55,8 @@ public class SensorDTO {
     public void setUltimaLeitura(Date ultimaLeitura) {
         this.ultimaLeitura = ultimaLeitura;
     }
+
+
+
 }
 

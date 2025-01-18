@@ -32,6 +32,9 @@ public class ConfigBean {
     @EJB
     private AdministratorBean administratorBean;
 
+    @EJB
+    private SensorBean sensorBean;
+
     @PostConstruct
     public void init() {
         System.out.println("\n\nConfigBean initialized\n\n");
@@ -63,6 +66,22 @@ public class ConfigBean {
             //adicionar produtos aos volumes
             List<Integer> produtoIds = Arrays.asList(produto1.getId(), produto2.getId(), produto3.getId());
             volumeBean.addProdutosToVolume(produtoIds,volume1.getId());
+
+            // Criar sensores
+            SensorAceleracao sensorAceleracao = sensorBean.createSensorAceleracao("Sensor Impacto", 5, true, 0);
+            SensorPosicao sensorPosicao = sensorBean.createSensorPosicao("Sensor Posicional", 10, true, 1.5F);
+            SensorTemperatura sensorTemperatura = sensorBean.createSensorTemperatura("Sensor de Temperatura", 3, true, 2.0F);
+
+            // Adicionar leituras aos sensores
+            sensorBean.addSensorReading(sensorAceleracao.getId(), 12.5F); // Detecta impacto
+            sensorBean.addSensorReading(sensorAceleracao.getId(), 9.0F); // Não detecta impacto
+
+            sensorBean.addPositionReading(sensorPosicao.getId(), 3.2F);
+            sensorBean.addPositionReading(sensorPosicao.getId(), 4.5F);
+
+            sensorBean.addTemperatureReading(sensorTemperatura.getId(), 22.5F);
+            sensorBean.addTemperatureReading(sensorTemperatura.getId(), 18.0F);
+
 
             System.out.println("Dados iniciais criados com sucesso!");
 
