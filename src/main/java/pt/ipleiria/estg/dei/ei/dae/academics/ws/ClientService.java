@@ -86,6 +86,17 @@ public class ClientService {
         return Response.ok(ClientDTO.from(client)).build();
     }
 
+    @DELETE
+    @Path("{username}")
+    public Response delete(@PathParam("username")String username) {
+        Client client = clientBean.find(username);
+        if (client == null){
+            return Response.status(Response.Status.NOT_FOUND).entity("Cliente não encontrado").build();
+        }
+        clientBean.delete(username);
+        return Response.noContent().build();
+    }
+
     @POST
     @Path("/{username}/email")
     public Response sendEmail(@PathParam("username") String username, EmailDTO email)

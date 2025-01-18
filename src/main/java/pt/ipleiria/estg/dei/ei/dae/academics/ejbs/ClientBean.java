@@ -77,4 +77,11 @@ public class ClientBean {
         
         entityManager.merge(client);
     }
+
+    public void delete(String id) {
+        Client client = entityManager.find(Client.class, id);
+        if (client != null) {
+            entityManager.remove(client);
+        }
+    }
 }
