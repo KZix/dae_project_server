@@ -12,40 +12,19 @@ public class EncomendaDTO {
     private String clienteUsername;
     private Date dataCriacao;
     private int estado;
-    private List<VolumeDTO> volumes;
 
     // Construtores
     public EncomendaDTO() {
     }
 
-    public EncomendaDTO(int id, String clienteUsername, Date dataCriacao, int estado, List<VolumeDTO> volumes) {
+    public EncomendaDTO(int id, String clienteUsername, Date dataCriacao, int estado) {
         this.id = id;
         this.clienteUsername = clienteUsername;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
-        this.volumes = volumes;
+
     }
 
-    public static EncomendaDTO from(Encomenda encomenda) {
-        if (encomenda == null) {
-            return null;
-        }
-
-        // Converte a lista de volumes para o formato DTO
-        List<VolumeDTO> volumesDTO = encomenda.getVolumes().stream()
-                .map(VolumeDTO::from)
-                .collect(Collectors.toList());
-
-        // Retorna o EncomendaDTO com os valores da entidade Encomenda
-        return new EncomendaDTO(
-                encomenda.getId(),
-                encomenda.getClienteUsername(),
-                encomenda.getDataCriacao(),
-                encomenda.getEstado(),
-                volumesDTO
-        );
-    }
-    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -57,6 +36,7 @@ public class EncomendaDTO {
     public String getClienteUsername() {
         return clienteUsername;
     }
+
     public void setClienteUsername(String clienteUsername) {
         this.clienteUsername = clienteUsername;
     }
@@ -77,11 +57,16 @@ public class EncomendaDTO {
         this.estado = estado;
     }
 
-    public List<VolumeDTO> getVolumes() {
-        return volumes;
+    public static EncomendaDTO from(Encomenda encomenda) {
+        return new EncomendaDTO(
+                encomenda.getId(),
+                encomenda.getClienteUsername(),
+                encomenda.getDataCriacao(),
+                encomenda.getEstado()
+        );
     }
 
-    public void setVolumes(List<VolumeDTO> volumes) {
-        this.volumes = volumes;
+    public static List<EncomendaDTO> from(List<Encomenda> encomendas) {
+        return encomendas.stream().map(EncomendaDTO::from).collect(Collectors.toList());
     }
 }

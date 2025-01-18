@@ -2,6 +2,10 @@ package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 @Entity
 @NamedQueries({
         @NamedQuery(
@@ -21,17 +25,24 @@ public class Produto {
     @ManyToOne
     private TipoProduto tipoProduto;
 
+    @ManyToMany
+    private List<Volume> volumes;
+
     // Constructors
     public Produto() {
+        this.volumes = new LinkedList<>();
     }
 
     public Produto(String nome, float preco, TipoProduto tipoProduto) {
         this.nome = nome;
         this.preco = preco;
         this.tipoProduto = tipoProduto;
+        this.volumes = new LinkedList<>();
     }
 
     // Getters and Setters
+    public void addVolume(Volume volume) {this.volumes.add(volume);}
+
     public int getId() {
         return id;
     }

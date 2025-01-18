@@ -1,24 +1,33 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllEncomendas",
+                query = "SELECT s FROM Encomenda s ORDER BY s.id" // JPQL
+        )
+})
 @Table(name = "encomendas")
 public class Encomenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "cliente_username", nullable = false)
+    @NotNull
+    @Column(name = "cliente_username")
     private String clienteUsername;
 
-    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCriacao = new Date();
 
-    @Column(nullable = false)
+    @NotNull
     private int estado;
 
     @OneToMany(mappedBy = "encomenda", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -26,14 +35,18 @@ public class Encomenda {
 
     // Construtores
     public Encomenda() {
+        this.volumes = new LinkedList<>();
     }
 
     public Encomenda(String clienteUsername, Date dataCriacao, int estado) {
         this.clienteUsername = clienteUsername;
         this.dataCriacao = dataCriacao;
         this.estado = estado;
+        this.volumes = new LinkedList<>();
     }
     // Getters e Setters
+    public void addVolume(Volume volume) {this.volumes.add(volume);}
+
     public int getId() {
         return id;
     }

@@ -1,12 +1,20 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ejbs;
 
+import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.ConstraintViolationException;
+import org.hibernate.Hibernate;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyConstraintViolationException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityExistsException;
+import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @Stateless
@@ -14,40 +22,74 @@ public class VolumeBean {
     @PersistenceContext
     private EntityManager em;
 
-    public Volume create(String descricao, List<Produto> produtos, Encomenda encomenda) {
-        // Validar a encomenda
-        if (encomenda == null || !em.contains(encomenda)) {
-            throw new IllegalArgumentException("A encomenda fornecida não está no estado gerenciado ou é nula.");
-        }
+    @EJB
+    private EncomendaBean encomendaBean;
 
-        // Validar os produtos
-        for (Produto produto : produtos) {
-            if (produto == null || !em.contains(produto)) {
-                throw new IllegalArgumentException("Um ou mais produtos fornecidos não estão no estado gerenciado ou são nulos.");
-            }
+    public Volume create(String descricao, int danificada, int encomenda_id)
+            throws MyEntityExistsException, MyEntityNotFoundException, MyConstraintViolationException {
+        // Validar a encomenda
+        var encomenda = encomendaBean.find(encomenda_id);
+        if (encomenda == null) {
+            throw new MyEntityNotFoundException("Encomenda nao encontrada");
         }
 
         // Criar o volume
-        Volume volume = new Volume(descricao, produtos);
-        volume.setEncomenda(encomenda);
-
-        // Persistir o volume
-        em.persist(volume);
-
-        return volume;
+        try {
+            var volume = new Volume(descricao, danificada, encomenda);
+            encomenda.addVolume(volume);
+            em.persist(volume);
+            em.flush();
+            return volume;
+        }catch (ConstraintViolationException e) {
+            throw new MyConstraintViolationException(e);
+        }
     }
 
     public Volume find(int id) {
         return em.find(Volume.class, id);
     }
 
-    public void update(int id, String descricao, List<Produto> produtos) {
+    public void update(int id, String descricao, List<Integer> produtoIds) {
+        List<Produto> produtos = new LinkedList<>();
         Volume volume = find(id);
         if (volume != null) {
             volume.setDescricao(descricao);
+            for (Integer produtoId : produtoIds) {
+                Produto produto = em.find(Produto.class, produtoId);
+                if (produto == null) {
+                    throw new IllegalArgumentException("Produto with ID " + produtoId + " not found.");
+                }
+                produtos.add(produto);
+            }
             volume.setProdutos(produtos);
             em.merge(volume);
         }
+    }
+
+    public void addProdutosToVolume(List<Integer> produtoIds, int idVolume) {
+        Volume volume = em.find(Volume.class, idVolume);
+        if (volume == null) {
+            throw new IllegalArgumentException("Volume com o id " + idVolume + " nao encontrado.");
+        }
+        for (Integer produtoId : produtoIds) {
+            Produto produto = em.find(Produto.class, produtoId);
+            if (produto == null) {
+                throw new IllegalArgumentException("Produto with ID " + produtoId + " not found.");
+            }
+            volume.addProduto(produto);
+            produto.addVolume(volume);
+            em.merge(produto);
+        }
+
+        em.merge(volume);
+
+
+    }
+
+    public Volume findWithProduts(int idVolume) {
+        var volume = this.find(idVolume);
+        Hibernate.initialize(volume.getProdutos());
+        return volume;
     }
 
     public void delete(int id) {
@@ -57,7 +99,27 @@ public class VolumeBean {
         }
     }
 
+    public void update(int id,String descricao, int danificada, int encomenda_id) {
+        Volume volume = em.find(Volume.class, id);
+        if (volume == null) {
+            System.err.println("ERROR_VOLUME_NOT_FOUND: " + id);
+            return;
+        }
+        em.lock(volume, LockModeType.OPTIMISTIC);
+        volume.setDescricao(descricao);
+        volume.setDanificada(danificada);
+        if (volume.getEncomenda().getId() != encomenda_id) {
+            Encomenda encomenda = em.find(Encomenda.class, encomenda_id);
+            if (encomenda == null) {
+                System.err.println("ERROR_ENCOMENDA_NOT_FOUND: " + encomenda_id);
+                return;
+            }
+            volume.setEncomenda(encomenda);
+        }
+        em.merge(volume);
+    }
+
     public List<Volume> findAll() {
-        return em.createQuery("SELECT v FROM Volume v", Volume.class).getResultList();
+        return em.createNamedQuery("getAllVolumes", Volume.class).getResultList();
     }
 }

@@ -32,7 +32,6 @@ public class EncomendaService {
             // Criar a encomenda com os dados fornecidos (sem volumes)
             Encomenda encomenda = encomendaBean.create(
                     encomendaDTO.getClienteUsername(),
-                    encomendaDTO.getDataCriacao(),
                     encomendaDTO.getEstado()
             );
             return Response.status(Response.Status.CREATED).entity(EncomendaDTO.from(encomenda)).build();
@@ -62,30 +61,4 @@ public class EncomendaService {
         return Response.ok(EncomendaDTO.from(encomenda)).build();
     }
 
-    // Adicionar volumes à encomenda
-    @POST
-    @Path("{encomendaId}/volumes")
-    public Response addVolumesToEncomenda(@PathParam("encomendaId") int encomendaId, List<Integer> volumeIds) {
-        try {
-            Encomenda encomenda = encomendaBean.find(encomendaId);
-            if (encomenda == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Encomenda não encontrada").build();
-            }
-
-            List<Volume> volumes = volumeIds.stream()
-                    .map(id -> em.find(Volume.class, id))
-                    .filter(volume -> volume != null) // Filtra volumes nulos
-                    .collect(Collectors.toList());
-
-            if (volumes.isEmpty()) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Nenhum volume válido fornecido").build();
-            }
-
-            encomendaBean.addVolumes(encomenda, volumes);
-
-            return Response.ok(EncomendaDTO.from(encomenda)).build();
-        } catch (IllegalArgumentException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
-    }
 }

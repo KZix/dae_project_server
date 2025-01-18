@@ -1,27 +1,21 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.ws;
 
 import jakarta.ejb.EJB;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.ipleiria.estg.dei.ei.dae.academics.dtos.VolumeDTO;
 import pt.ipleiria.estg.dei.ei.dae.academics.ejbs.VolumeBean;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
 import pt.ipleiria.estg.dei.ei.dae.academics.exceptions.MyEntityNotFoundException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Path("volumes") // Relative URL for this service
-@Produces({MediaType.APPLICATION_JSON}) // Specifies the response format as JSON
-@Consumes({MediaType.APPLICATION_JSON}) // Specifies the request format as JSON
+@Produces({MediaType.APPLICATION_JSON}) // Injects header "Content-Type: application/json"
+@Consumes({MediaType.APPLICATION_JSON}) // Injects header "Accept: application/json"
 public class VolumeService {
-    @PersistenceContext
-    private EntityManager em;
 
     @EJB
     private VolumeBean volumeBean;
@@ -29,88 +23,79 @@ public class VolumeService {
     @GET
     @Path("/")
     public List<VolumeDTO> getAllVolumes() {
-        // Recupera todos os volumes e converte para DTO
-        List<Volume> volumes = volumeBean.findAll();
-        return volumes.stream().map(VolumeDTO::from).collect(Collectors.toList());
+        return volumeBean.findAll()
+                .stream()
+                .map(VolumeDTO::from)
+                .collect(Collectors.toList());
     }
 
     @GET
-    @Path("{volumeId}")
-    public Response getVolumeById(@PathParam("volumeId") int id) {
-        Volume volume = volumeBean.find(id);
-        if (volume == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Volume não encontrado").build();
+    @Path("{id}")
+    public Response getVolumeById(@PathParam("id") int id) {
+        try {
+            Volume volume = volumeBean.find(id);
+            return Response.ok(VolumeDTO.from(volume)).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
-        return Response.ok(VolumeDTO.from(volume)).build();
     }
 
     @POST
     @Path("/")
     public Response createVolume(VolumeDTO volumeDTO) {
         try {
-            // Obter os produtos do banco de dados através dos IDs fornecidos
-            List<Produto> produtos = volumeDTO.getProdutos().stream()
-                    .map(produtoDTO -> em.find(Produto.class, produtoDTO.getId())) // Encontra cada Produto pelo ID
-                    .filter(produto -> produto != null) // Filtra produtos nulos (caso não encontre um Produto com o ID fornecido)
-                    .collect(Collectors.toList());
-
-            // Obter a encomenda do banco de dados pelo ID fornecido
-            Encomenda encomenda = volumeDTO.getEncomenda() != null ?
-                    em.find(Encomenda.class, volumeDTO.getEncomenda().getId()) : null;
-
-            // Verificar se a encomenda e os produtos são válidos
-            if (encomenda == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("Encomenda não encontrada").build();
-            }
-
-            // Criar o volume com os dados fornecidos
-            Volume volume = volumeBean.create(
-                    volumeDTO.getDescricao(),
-                    produtos,
-                    encomenda
-            );
-
+            Volume volume = volumeBean.create(volumeDTO.getDescricao(), volumeDTO.getDanificada(),volumeDTO.getEncomendaId());
             return Response.status(Response.Status.CREATED).entity(VolumeDTO.from(volume)).build();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
     @PUT
-    @Path("{volumeId}")
-    public Response updateVolume(@PathParam("volumeId") int id, VolumeDTO volumeDTO) {
+    @Path("{id}")
+    public Response updateVolume(@PathParam("id") int id, VolumeDTO volumeDTO) {
         try {
-            // Obter os produtos do banco de dados através dos IDs fornecidos
-            List<Produto> produtos = volumeDTO.getProdutos().stream()
-                    .map(produtoDTO -> em.find(Produto.class, produtoDTO.getId())) // Encontra cada Produto pelo ID
-                    .filter(produto -> produto != null) // Filtra produtos nulos (caso não encontre um Produto com o ID fornecido)
+            // Extrair os IDs dos produtos do VolumeDTO
+            List<Integer> produtoIds = volumeDTO.getProdutos()
+                    .stream()
+                    .map(produtoDTO -> produtoDTO.getId())
                     .collect(Collectors.toList());
 
-            // Atualizar o volume com os dados fornecidos
-            volumeBean.update(id, volumeDTO.getDescricao(), produtos);
+            // Atualizar o volume usando os IDs dos produtos
+            volumeBean.update(id, volumeDTO.getDescricao(), produtoIds);
 
-            // Encontrar o volume atualizado
+            // Retornar o volume atualizado
             Volume updatedVolume = volumeBean.find(id);
-            if (updatedVolume == null) {
-                return Response.status(Response.Status.NOT_FOUND).entity("Volume não encontrado").build();
-            }
-
-            // Retornar a resposta com o volume atualizado
             return Response.ok(VolumeDTO.from(updatedVolume)).build();
         } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 
+
     @DELETE
-    @Path("{volumeId}")
-    public Response deleteVolume(@PathParam("volumeId") int id) {
-        Volume volume = volumeBean.find(id);
-        if (volume == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Volume não encontrado").build();
+    @Path("{id}")
+    public Response deleteVolume(@PathParam("id") int id) {
+        try {
+            volumeBean.delete(id);
+            return Response.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
-        volumeBean.delete(id);
-        return Response.noContent().build();
     }
 
+    @POST
+    @Path("{id}/produtos")
+    public Response addProdutosToVolume(@PathParam("id") int volumeId, List<Integer> produtoIds) {
+        try {
+            volumeBean.addProdutosToVolume( produtoIds,volumeId);
+            return Response.ok("Produtos adicionados com sucesso ao Volume com ID " + volumeId).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 }

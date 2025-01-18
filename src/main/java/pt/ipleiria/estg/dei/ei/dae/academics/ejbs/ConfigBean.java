@@ -4,12 +4,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Produto;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.SensorTemperatura;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.TipoProduto;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
-import pt.ipleiria.estg.dei.ei.dae.academics.entities.Encomenda;
+import pt.ipleiria.estg.dei.ei.dae.academics.entities.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,66 +15,60 @@ import java.util.List;
 public class ConfigBean {
 
     @EJB
-    private AdministratorBean administratorBean;
-
-    @EJB
-    private SensorBean sensorBean;
+    private ClientBean clientBean;
 
     @EJB
     private ProdutoBean produtoBean;
 
     @EJB
-    private VolumeBean volumeBean;
+    private TipoProdutoBean tipoProdutoBean;
 
     @EJB
     private EncomendaBean encomendaBean;
 
     @EJB
-    private TipoProdutoBean tipoProdutoBean;
+    private VolumeBean volumeBean;
 
     @EJB
-    private ClientBean clientBean;
+    private AdministratorBean administratorBean;
 
     @PostConstruct
     public void init() {
-        System.out.println("\n\nConfigBean init\n\n");
-
-        // Criar clientes
-        clientBean.create("john_doe", "password123", "John Doe", "john.doe@example.com");
-        clientBean.create("jane_doe", "password456", "Jane Doe", "jane.doe@example.com");
-        administratorBean.create("admin", "admin", "John Admin", "admin@example.com");
+        System.out.println("\n\nConfigBean initialized\n\n");
 
         try {
-            // Criar sensores de temperatura
-            SensorTemperatura sensor = sensorBean.createSensorTemperatura("Temperature Sensor", 50, true, 22.1f);
+            // Criar clientes
+            clientBean.create("john_doe", "password123", "John Doe", "john.doe@example.com");
+            clientBean.create("jane_doe", "password456", "Jane Doe", "jane.doe@example.com");
+            administratorBean.create("admin", "admin", "John Admin", "admin@example.com");
 
-            // Adicionar leituras ao sensor
-            sensorBean.addSensorReading(sensor.getId(), 22.5f);
-            sensorBean.addSensorReading(sensor.getId(), 23.8f);
-            sensorBean.addSensorReading(sensor.getId(), 21.7f);
+            // Criar tipos de produto
+            TipoProduto tipoEletronico = tipoProdutoBean.create("Eletrônicos");
+            TipoProduto tipoDomestico = tipoProdutoBean.create("Domésticos");
+
+            // Criar produtos
+            Produto produto1 = produtoBean.create("Smartphone", 699.99F, tipoEletronico.getId());
+            Produto produto2 = produtoBean.create("Tablet", 499.99F, tipoEletronico.getId());
+            Produto produto3 = produtoBean.create("Microondas", 150.00F, tipoDomestico.getId());
+
+            // Criar encomendas
+            Encomenda encomenda1 = encomendaBean.create("john_doe",0);
+            Encomenda encomenda2 = encomendaBean.create("jane_doe",1);
+
+            // Criar volumes e associar às encomendas
+            Volume volume1 = volumeBean.create("Volume 1",0, encomenda1.getId());
+            Volume volume2 = volumeBean.create("Volume 2",0, encomenda1.getId());
+            Volume volume3 = volumeBean.create("Volume 3",0, encomenda2.getId());
+
+            //adicionar produtos aos volumes
+            List<Integer> produtoIds = Arrays.asList(produto1.getId(), produto2.getId(), produto3.getId());
+            volumeBean.addProdutosToVolume(produtoIds,volume1.getId());
+
+            System.out.println("Dados iniciais criados com sucesso!");
+
         } catch (Exception e) {
+            System.err.println("Erro ao inicializar o banco de dados: " + e.getMessage());
             e.printStackTrace();
-        }
-
-        try {
-            // Criar tipo de produto
-            TipoProduto tipoEletronico = tipoProdutoBean.create("Electronics");
-            Produto produto = produtoBean.create("Smartphone", 699.99f, tipoEletronico.getId());
-
-            // Criar encomenda sem volumes
-            Encomenda encomenda = encomendaBean.create("john_doe", new Date(), 0);  // Criar encomenda com cliente 1 e estado 0 (sem volumes)
-
-            // Criar volume e associar à encomenda
-            Volume volume = volumeBean.create("Volume 1", List.of(produto), encomenda); // Associando produto ao volume e volume à encomenda
-
-            // Outra encomenda com volumes vazios
-            Encomenda encomenda2 = encomendaBean.create("jane_doe", new Date(), 1);  // Encomenda 2 sem volumes ainda
-
-            // Criar outros volumes e associar à encomenda2
-            Produto produto2 = produtoBean.create("Tablet", 499.99f, tipoEletronico.getId());
-            Volume volume2 = volumeBean.create("Volume 2", List.of(produto2), encomenda2);  // Associando produto ao volume2 e associando volume2 à encomenda2
-        } catch (Exception e) {
-            e.printStackTrace(); // Logs the exact exception
         }
     }
 }

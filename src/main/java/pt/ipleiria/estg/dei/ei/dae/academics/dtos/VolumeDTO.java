@@ -2,6 +2,7 @@ package pt.ipleiria.estg.dei.ei.dae.academics.dtos;
 
 import pt.ipleiria.estg.dei.ei.dae.academics.entities.Volume;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,42 +10,36 @@ public class VolumeDTO {
 
     private int id;
     private String descricao;
-    private int tipoEmbalagem;
-    private EncomendaDTO encomenda;
+    private int danificada;
+    private int encomendaId;
     private List<ProdutoDTO> produtos;
 
     // Construtores
     public VolumeDTO() {
+        this.produtos=new LinkedList<>();
     }
 
-    public VolumeDTO(int id, String descricao, int tipoEmbalagem, EncomendaDTO encomenda , List<ProdutoDTO> produtos) {
+    public VolumeDTO(int id, String descricao, int danificada, int encomendaId) {
         this.id = id;
         this.descricao = descricao;
-        this.tipoEmbalagem = tipoEmbalagem;
-        this.encomenda = encomenda;
-        this.produtos = produtos;
+        this.danificada = danificada;
+        this.encomendaId = encomendaId;
+        this.produtos = new LinkedList<>();
     }
 
     public static VolumeDTO from(Volume volume) {
-        if (volume == null) {
-            return null;
-        }
-
-        // Converte os produtos e encomenda para seus respectivos DTOs
-        EncomendaDTO encomendaDTO = EncomendaDTO.from(volume.getEncomenda());
-        List<ProdutoDTO> produtosDTO = volume.getProdutos().stream()
-                .map(ProdutoDTO::from)
-                .collect(Collectors.toList());
-
         return new VolumeDTO(
                 volume.getId(),
                 volume.getDescricao(),
-                volume.getTipoEmbalagem(),
-                encomendaDTO,
-                produtosDTO
+                volume.getDanificada(),
+                volume.getEncomenda().getId()
         );
     }
-    // Getters e Setters
+
+    public static List<VolumeDTO> from(List<Volume> volumes) {
+        return volumes.stream().map(VolumeDTO::from).collect(Collectors.toList());
+    }
+
     public int getId() {
         return id;
     }
@@ -61,20 +56,20 @@ public class VolumeDTO {
         this.descricao = descricao;
     }
 
-    public int getTipoEmbalagem() {
-        return tipoEmbalagem;
+    public int getDanificada() {
+        return danificada;
     }
 
-    public void setTipoEmbalagem(int tipoEmbalagem) {
-        this.tipoEmbalagem = tipoEmbalagem;
+    public void setDanificada(int danificada) {
+        this.danificada = danificada;
     }
 
-    public EncomendaDTO getEncomenda() {
-        return encomenda;
+    public int getEncomendaId() {
+        return encomendaId;
     }
 
-    public void setEncomenda(EncomendaDTO encomenda) {
-        this.encomenda = encomenda;
+    public void setEncomendaId(int encomendaId) {
+        this.encomendaId = encomendaId;
     }
 
     public List<ProdutoDTO> getProdutos() {

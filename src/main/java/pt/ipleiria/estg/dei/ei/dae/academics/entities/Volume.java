@@ -1,34 +1,48 @@
 package pt.ipleiria.estg.dei.ei.dae.academics.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllVolumes",
+                query = "SELECT s FROM Volume s ORDER BY s.id" // JPQL
+        )
+})
 @Table(name = "volumes")
 public class Volume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String descricao;
-    @Column(nullable = false)
-    private int tipoEmbalagem;
+    @NotNull
+    private int danificada;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "encomenda_id", nullable = false)
+    @JoinColumn(name = "encomenda_id")
     private Encomenda encomenda;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "volumes")
     private List<Produto> produtos;
 
     // Constructors
     public Volume() {
+        this.produtos= new LinkedList<>();
     }
 
-    public Volume(String descricao, List<Produto> produtos) {
+    public Volume(String descricao, int danificada, Encomenda encomenda) {
         this.descricao = descricao;
-        this.produtos = produtos;
+        this.danificada = danificada;
+        this.encomenda = encomenda;
+        this.produtos = new LinkedList<>();
     }
 
+    public void addProduto(Produto produto) {this.produtos.add(produto);}
     // Getters and Setters
     public int getId() {
         return id;
@@ -54,12 +68,12 @@ public class Volume {
         this.produtos = produtos;
     }
 
-    public int getTipoEmbalagem() {
-        return tipoEmbalagem;
+    public int getDanificada() {
+        return danificada;
     }
 
-    public void setTipoEmbalagem(int tipoEmbalagem) {
-        this.tipoEmbalagem = tipoEmbalagem;
+    public void setDanificada(int tipoEmbalagem) {
+        this.danificada = tipoEmbalagem;
     }
 
     public Encomenda getEncomenda() {
